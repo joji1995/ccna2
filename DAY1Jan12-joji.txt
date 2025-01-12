@@ -261,6 +261,10 @@ configure terminal
  ! destination-pattern 11..
  ! session target ipv4:10.11.100.8
  ! codec g711ULAW
+dial-peer voice 12 Voip
+ destination-pattern 12..
+ session target ipv4:10.12.100.8
+ codec g711ULAW
 dial-peer voice 21 Voip
  destination-pattern 21..
  session target ipv4:10.21.100.8
@@ -351,8 +355,8 @@ config t
  !!! EDGE route NOT dikit to ClassMate:
 conf t
  ip routing 
- ip route 10.11.0.0 255.255.0.0 200.0.0.11
-! ip route 10.12.0.0 255.255.0.0 200.0.0.12
+! ip route 10.11.0.0 255.255.0.0 200.0.0.11
+ ip route 10.12.0.0 255.255.0.0 200.0.0.12
  ip route 10.21.0.0 255.255.0.0 200.0.0.21
  ip route 10.22.0.0 255.255.0.0 200.0.0.22
  ip route 10.31.0.0 255.255.0.0 200.0.0.31
@@ -367,7 +371,7 @@ conf t
  ip route 10.72.0.0 255.255.0.0 200.0.0.72
  ip route 10.81.0.0 255.255.0.0 200.0.0.81
  ip route 10.82.0.0 255.255.0.0 200.0.0.82
- ip route 10._.0.0 255.255.0.0 10._._.4
+ ip route 10.11.0.0 255.255.0.0 10.11.11.4
  end
  
 *********************************************
@@ -376,20 +380,20 @@ Layer three/3 switch ROUTING = 300k up!!!
 !SI SWITCH ASA/DIKIT KAY EDGE PARA MAKALABAS
 conf t 
 ip routing
-ip route 0.0.0.0 0.0.0.0 10._._.1
+ip route 0.0.0.0 0.0.0.0 10.11.11.1
 end
 
 @CUCM:DEFAULT ROUTING( 0.0.0.0 0.0.0.0) FOR CUCM:
 !SI CUCM ASA/DIKIT KAY SWITCH VLAN 100 PARA MAKALABAS
 conf t
 ip routing
-ip route 0.0.0.0 0.0.0.0 10._.100.4
+ip route 0.0.0.0 0.0.0.0 10.11.100.4
 end
 
 !How to Static Route windows Server:
 cmd
-route  add   10.0.0.0   mask   255.0.0.0    10._.1.4
-route  add  200.0.0.0   mask  255.255.255.0   10._.1.4
+route  add   10.0.0.0   mask   255.0.0.0    10.11.1.4
+route  add  200.0.0.0   mask  255.255.255.0   10.11.1.4
 
 ********************************************
 
