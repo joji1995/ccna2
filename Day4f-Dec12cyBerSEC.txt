@@ -658,6 +658,26 @@ bldg1 in PH:
 sudo su
 ifconfig eth0 10.10.10.10 netmask 255.255.255.0 up
 route add default gw 10.10.10.1
+
+bldg1a in PH:
+sudo su
+ifconfig eth0 10.10.10.11 netmask 255.255.255.0 up
+route add default gw 10.10.10.1
+
+Reverse Proxy / NAT Port Mapping:
+conf t
+access-list 7 permit any
+ip nat inside source static tcp 10.10.10.10 80 208.8.8.101 8080
+ip nat inside source static tcp 10.10.10.10 443 208.8.8.101 8443
+ip nat inside source static tcp 10.10.10.11 80 208.8.8.101 222
+ip nat inside source list 7 int gi 1 overload
+
+
+
+
+
+
+
 bldg2 in JP:
 sudo su
 ifconfig eth0 20.20.20.20 netmask 255.255.255.0 up
