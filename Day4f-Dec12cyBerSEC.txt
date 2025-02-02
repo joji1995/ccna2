@@ -617,6 +617,51 @@ icmp 192.168.108.88:57096  192.168.103.12:57096  8.8.8.8:57096         8.8.8.8:5
 icmp 192.168.108.88:56584  192.168.103.12:56584  8.8.4.4:56584         8.8.4.4:56584
 Total number of translations: 7
 
+#Real world skills: site to site vpn tunnel:
+step 1: prepare FWvpnPH: 
+CONFIG T
+IP ROUTE 0.0.0.0  0.0.0.0 208.8.8.2
+no logging console
+Int Gi 2
+no shut
+ip add 192.168.102.11 255.255.255.0
+config t
+ip name-server 8.8.8.8 1.1.1.1
+ip domain-lookup
+int gi 1
+no shut
+ip add 208.8.8.11 255.255.255.0
+int gi 3
+no shut
+ip add 10.10.10.1 255.255.255.0
+do sh ip int br
+
+step 2: prepare FWvpnJP: 
+CONFIG T
+IP ROUTE 0.0.0.0  0.0.0.0 208.8.8.2
+no logging console
+Int Gi 2
+no shut
+ip add 192.168.102.12 255.255.255.0
+config t
+ip name-server 8.8.8.8 1.1.1.1
+ip domain-lookup
+int gi 1
+no shut
+ip add 208.8.8.12 255.255.255.0
+int gi 3
+no shut
+ip add 20.20.20.1 255.255.255.0
+do sh ip int br
+
+
+
+
+
+
+
+
+
 CONFIGURING CISCO NETWORK SERVICES: 
 1. NETWORK TIME PROTOCOL: NTP uses udp port 123 makes all devices use same time.
 cmd
