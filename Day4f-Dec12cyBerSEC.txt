@@ -42,8 +42,8 @@ no logging console
 Int Gi 2
 no shut
 ip add 192.168.102.11 255.255.255.0
-@telnet use secureCRT: telnet 192.168.108.5
-in SEcureCRT, Paste This:
+!@telnet use secureCRT: telnet 192.168.108.5
+!in SEcureCRT, Paste This:
 config t
 IP ROUTE 0.0.0.0  0.0.0.0 208.8.8.2
 ip name-server 8.8.8.8 1.1.1.1
@@ -54,7 +54,7 @@ ip add 208.8.8.11 255.255.255.0
 int gi 3
 no shut
 ip add 192.168.103.11 255.255.255.0
-
+do sh ip int br
 
 ALL THE PORN SITES THE WORLD ARE OWNED BY 5 COMPANIES:
 
@@ -80,22 +80,22 @@ end
 
 Alternative: use standard ACL 1-99
 config t
-no access-list 69
-access-list 69 DENY 66.254.0.0 0.0.255.255
-access-list 69 DENY 104.21.0.0 0.0.255.255
-access-list 69 DENY 68.235.0.0 0.0.255.255
-access-list 69 DENY 104.17.0.0 0.0.255.255
-access-list 69 DENY 88.208.0.0 0.0.255.255
-access-list 69 DENY 208.77.0.0 0.0.255.255
-access-list 69 DENY 172.67.0.0 0.0.255.255
-access-list 69 permit Any
+no access-list 11
+access-list 11 DENY 66.254.0.0 0.0.255.255
+access-list 11 DENY 104.21.0.0 0.0.255.255
+access-list 11 DENY 68.235.0.0 0.0.255.255
+access-list 11 DENY 104.17.0.0 0.0.255.255
+access-list 11 DENY 88.208.0.0 0.0.255.255
+access-list 11 DENY 208.77.0.0 0.0.255.255
+access-list 11 DENY 172.67.0.0 0.0.255.255
+access-list 11 permit Any
 Int gi 1
  ip access-group 69 in
 end
 Goberno: allow all Porn, for freedom of expression!
 config t
 Int gi 1
- NO ip access-group 69 in
+ NO ip access-group 11 in
 end
 
 Task1.2: block admu.edu.ph, dlsu.edu.ph, ccp.edu.ph, ue.edu.ph
@@ -104,15 +104,15 @@ ping www.dlsu.edu.ph 172.67.14.0   104.22.36.0
 ping www.ccp.edu.ph 50.6.160.0     
 ping www.feu.edu.ph 184.168.125.0  
 ping  www.ue.edu.ph 155.137.92.0  
-ping  www.yourschool.edu.ph = _________
+!ping  www.urs.edu.ph = _________
 config t
 NO ip access-list standard NOISKUL
 ip access-list standard NOISKUL
-DENY   __.__.__.__   0.0.255.255
-DENY   __.__.__.__   0.0.255.255
-DENY   __.__.__.__   0.0.255.255
-DENY   __.__.__.__   0.0.255.255
-DENY   __.__.__.__   0.0.255.255
+DENY   172.67.14.0   0.0.255.255
+DENY   50.6.160.0   0.0.255.255
+DENY   184.168.125.0   0.0.255.255
+DENY   155.137.92.0   0.0.255.255
+!DENY   __.__.__.__   0.0.255.255
 Permit Any
 Int Gi 1
  ip access-group NOISKUL in
