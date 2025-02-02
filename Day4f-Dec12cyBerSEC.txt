@@ -128,11 +128,11 @@ www.iptorrents.com
 config t
 NO ip access-list standard NOTORS
 ip access-list standard NOTORS
-DENY   __.__.__.__   0.0.255.255
-DENY   __.__.__.__   0.0.255.255
-DENY   __.__.__.__   0.0.255.255
-DENY   __.__.__.__   0.0.255.255
-DENY   __.__.__.__   0.0.255.255
+DENY   162.159.0.0 0.0.255.255
+DENY  172.67.0.0   0.0.255.255
+DENY   76.223.0.0   0.0.255.255
+DENY   104.21.0.0   0.0.255.255
+!DENY   __.__.__.__   0.0.255.255
 Permit Any
 Int Gi 1
  ip access-group NOTORS in
@@ -267,27 +267,28 @@ ip http secure-server
 !Make Ping EASY
 ip host www.web310.com 192.168.103.10
 ip host www.web311.com 192.168.103.11
-ip host pc 10.m.1.10
-ip host cm 10.m.100.8
-ip host cm2 10.m.100.9
-ip host p1 10.m.100.101
-ip host p2 10.m.100.102
-ip host c6 10.m.50.6
-ip host c8 10.m.50.8
-ip host sw 10.m.1.4
-ip host ed 10.m.m.1
+ip host pc 10.11.1.10
+ip host cm 10.11.100.8
+ip host cm2 10.11.100.9
+ip host p1 10.11.100.101
+ip host p2 10.11.100.102
+ip host c6 10.11.50.6
+ip host c8 10.11.50.8
+ip host sw 10.11.1.4
+ip host ed 10.11.11.1
 
 TASK7: Enter the World of BlueTeam: Protect vs Redteam: Attack, 
 BlueTeam: UTM: unified Threat management:
 1. firewall
 2. VPN
-3. EnterpriseAnti-Virus
+3. EnterpriseAnti-Virus / EndPoint Protection
 4. IntrusionDetection/IntrusionPrevention
 5  Network Admissions Control.
 Top 5 UTM: 1.FortinetFortigate: syet
            1.1: Palo Alto:superSuplado
            2. Checkpoint
            3.4 Cisco
+           4. Sophos / Mahirap ka
 
 Firewall Profile no.1: use ExtendedACL vs NamedExtendedAcl:
 ex.1: you are the Blue Team/SOC guys for pogo sites:
@@ -299,7 +300,7 @@ tcp,udp,icmp,IP     Any      web310/11
 Config t
 service timestamps log datetime
 service timestamps debug datetime
-logging 10.m.1.10
+logging 10.11.1.10
 logging trap 5
 NO IP access-list Extended FWP1
 IP access-list Extended FWP1
@@ -325,22 +326,88 @@ www.web311.com open only telnet, ssh, https, ping/icmp => 7lines
   GOLDEN  FIREWALL FORMULA:  paloalto,fortinet,cisco,checkpoint.
    protocol         hacker    victim       port
 config t
-NO IP access-list Extended FWP2
-IP access-list Extended FWP2
- Permit tcp Any host www.web310.com eq __ log
- Permit tcp Any host www.web310.com eq __ log
- Permit tcp Any host www.web310.com eq __ log
- Permit tcp Any host www.web311.com eq __ log
- Permit tcp Any host www.web311.com eq __ log
- Permit tcp Any host www.web311.com eq __ log 
- Permit ___  Any host www.web311.com log
+NO IP access-list Extended WAF2
+IP access-list Extended WAF2
+ Permit tcp Any host www.web310.com eq 22 log
+ Permit tcp Any host www.web310.com eq 53 log
+ Permit tcp Any host www.web310.com eq 80 log
+ Permit tcp Any host www.web311.com eq 23 log
+ Permit tcp Any host www.web311.com eq 22 log
+ Permit tcp Any host www.web311.com eq 443 log 
+ Permit icmp  Any host www.web311.com log
  Int Gi 3
-  ip access-group FWP2 in
+  ip access-group WAF2 in
 REMOVE FIREWALL:
 CONfig t
  Int Gi 3
   ip access-group FWP2 in
 end
+
+Ex. Make policy for WAF3
+www.web310.com open only ssh, http
+www.web311.com open only https, ping/icmp => 7lines
+WAF3
+config t
+NO IP access-list Extended WAF3
+IP access-list Extended WAF3
+ Permit tcp Any host www.web310.com eq 22 log
+ Permit tcp Any host www.web310.com eq 80 log
+ Permit tcp Any host www.web311.com eq 443 log
+ Permit icmp  Any host www.web311.com log
+ Int Gi 3
+  ip access-group WAF3 in
+
+Ex.
+www.web310.com open only 
+www.web311.com open only ping
+
+config t
+NO IP access-list Extended PRANING3
+IP access-list Extended PRANING3
+ Permit tcp Any host www.web310.com eq 443 log
+ Permit icmp  Any host www.web311.com log
+ Int Gi 3
+  ip access-group PRANING3 in
+
+REMOVE FIREWALL:
+CONfig t
+ Int Gi 3
+  ip access-group PRANING3 in
+end
+
+Ex.
+web310 http and https are open
+web311 ssh, dns open
+config t
+NO IP access-list Extended Policy1
+IP access-list Extended Policy1
+ Permit tcp Any host www.web310.com eq 80 log
+ Permit tcp Any host www.web310.com eq 443 log
+ Permit tcp Any host www.web310.com eq 22 log
+ Permit tcp Any host www.web310.com eq 53 log
+ Int Gi 3
+  ip access-group Policy1 in
+
+Ex.
+web310 https and ping are open
+web311 dns and ping are open
+config t
+NO IP access-list Extended PROWEBAPP2
+IP access-list Extended PROWEBAPP2
+Permit tcp Any host www.web310.com eq 443 log
+Permit icmp Any host www.web310.com log
+Permit tcp Any host www.web311.com eq 22 log
+Permit icmp Any host www.web311.com log
+ Int Gi 3
+  ip access-group PROWEBAPP2 in
+
+REMOVE FIREWALL:
+CONfig t
+ Int Gi 3
+  ip access-group PROWEBAPP2 in
+end
+
+
 
 ex.3: you are the admin for SUPERPRANING pogo sites:
 www.web310.com open only 443
@@ -464,7 +531,8 @@ NETWORK TIME PROTOCOL OR NTP
 is a layer 7 protocol using UDP 123
 configure your VPNPH to use time.google.com servers in USA:
 config t
-ntp server 216.239.35.8
+ntp master 1
+ntp update-calendar
 end
 show ntp associations
 GIVE IP ADDRESS TO LINUX BLDGONE AND BLDGTWO:
