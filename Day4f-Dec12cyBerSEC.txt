@@ -531,6 +531,16 @@ NETWORK TIME PROTOCOL OR NTP
 is a layer 7 protocol using UDP 123
 configure your VPNPH to use time.google.com servers in USA:
 config t
+
+config t
+ntp server 216.239.35.8
+end
+show ntp associations
+
+
+
+
+
 ntp master 1
 ntp update-calendar
 end
