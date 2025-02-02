@@ -654,7 +654,15 @@ no shut
 ip add 20.20.20.1 255.255.255.0
 do sh ip int br
 
-
+bldg1 in PH:
+sudo su
+ifconfig eth0 10.10.10.10 netmask 255.255.255.0 up
+route add default gw 10.10.10.1
+bldg2 in JP:
+sudo su
+ifconfig eth0 20.20.20.20 netmask 255.255.255.0 up
+route add default gw 20.20.20.1
+ping 8.8.8.8   1.1.1.1  4.2.2.2  8.8.4.4
 
 
 
