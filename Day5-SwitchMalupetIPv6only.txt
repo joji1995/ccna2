@@ -288,7 +288,7 @@ SuperMan: 802.1s: MiSTP
 
 TASK8: ACCESS PORTS VS TRUNK PORTS: lab mo sa exam.
 +
-TAAS/BABA:
+TAAS/BABA: 
 config t
 Int Range fa0/10-12
  shutdown
@@ -435,6 +435,7 @@ spanning-tree mst 2 root Secondary
 spanning-tree mst 3 root primary
 
 TASK15: Implementing Port-Security in Cisco/bawal Nakaw/bawalPalit.
+PREVENT LINK ATTACKS.
 Switch:
 baba:
 sh cdp nei
